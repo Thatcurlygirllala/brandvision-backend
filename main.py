@@ -1,39 +1,31 @@
-
 from flask import Flask, request, jsonify
-from painpoint import run_painpoint
-from audience import run_audience
-from swipe import run_swipe
-from calendar_tool import run_calendar
+import painpoint, audience, swipe, calendar_tool
 
 app = Flask(__name__)
 
-@app.route('/')
-def home():
-    return jsonify({'message': 'BrandVision API is live!'})
-
-@app.route('/painpoint', methods=['POST'])
-def painpoint():
+@app.route('/generate-pain-point', methods=['POST'])
+def generate_pain_point():
     data = request.json
-    result = run_painpoint(data['input'])
+    result = painpoint.run_painpoint(data.get('niche'))
     return jsonify({'result': result})
 
-@app.route('/audience', methods=['POST'])
-def audience():
+@app.route('/generate-audience-insight', methods=['POST'])
+def generate_audience_insight():
     data = request.json
-    result = run_audience(data['input'])
+    result = audience.run_audience_insight(data.get('niche'))
     return jsonify({'result': result})
 
-@app.route('/swipe', methods=['POST'])
-def swipe():
+@app.route('/generate-swipe-copy', methods=['POST'])
+def generate_swipe_copy():
     data = request.json
-    result = run_swipe(data['input'])
+    result = swipe.run_swipe_copy(data.get('offer'))
     return jsonify({'result': result})
 
-@app.route('/calendar', methods=['POST'])
-def calendar():
+@app.route('/generate-content-calendar', methods=['POST'])
+def generate_content_calendar():
     data = request.json
-    result = run_calendar(data['input'])
+    result = calendar_tool.run_content_calendar(data.get('niche'))
     return jsonify({'result': result})
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
