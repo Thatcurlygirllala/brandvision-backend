@@ -1,31 +1,37 @@
 from flask import Flask, request, jsonify
-import painpoint, audience, swipe, calendar_tool
+import combined_profiler, swipe, ai_social_calendar
 
 app = Flask(__name__)
 
-@app.route('/generate-pain-point', methods=['POST'])
-def generate_pain_point():
+@app.route('/generate-combined-profiler', methods=['POST'])
+def generate_combined_profiler():
     data = request.json
-    result = painpoint.run_painpoint(data.get('niche'))
-    return jsonify({'result': result})
-
-@app.route('/generate-audience-insight', methods=['POST'])
-def generate_audience_insight():
-    data = request.json
-    result = audience.run_audience_insight(data.get('niche'))
+    result = combined_profiler.run_combined_profiler(
+        data.get('niche'),
+        data.get('audience'),
+        data.get('product')
+    )
     return jsonify({'result': result})
 
 @app.route('/generate-swipe-copy', methods=['POST'])
 def generate_swipe_copy():
     data = request.json
-    result = swipe.run_swipe_copy(data.get('offer'))
+    result = swipe.run_swipe_copy(
+        data.get('offer'),
+        data.get('audience'),
+        data.get('tone')
+    )
     return jsonify({'result': result})
 
-@app.route('/generate-content-calendar', methods=['POST'])
-def generate_content_calendar():
+@app.route('/generate-social-calendar', methods=['POST'])
+def generate_social_calendar():
     data = request.json
-    result = calendar_tool.run_content_calendar(data.get('niche'))
+    result = ai_social_calendar.run_social_calendar(
+        data.get('business_name'),
+        data.get('niche'),
+        data.get('user_email')
+    )
     return jsonify({'result': result})
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    app.run(host='0.0.0.0', port=5000)
