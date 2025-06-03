@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify
-import combined_profiler, swipe, ai_social_calendar
+import combined_profiler
+import swipe
+import ai_social_calendar
 
 app = Flask(__name__)
 
